@@ -7,8 +7,9 @@
  * of ants and doodlebugs for the simulation.
  * Also in main() the array of ants and doodlebugs objects are initialized as well 
  * as the grid. 
- * After initialization the code contins a busy while loop with that verifies that the 
- * number of days in the day variable is less than the days elapsed. 
+ * After initialization the code contains a busy while loop that verifies that the 
+ * number of "days" in the day variable is less than the number in variable elapse. 
+ * each "day" last 200/1000 milliseconds.
  * The loop executes spawing and hunting of the insects in the simulation. 
  */
 #include"ant.h"
