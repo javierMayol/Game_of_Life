@@ -1,24 +1,19 @@
 #ifndef DOODLEBUG_h
 #define DOODLEBUG_h
 
-#include"creature.h"
-#include"ant.h"
+#include"Critter.h"
 
-class doodlebug: public creature
+#define ANT_H
+
+class Doodlebug: public Critter
 {
   public:
-    doodlebug(island *isla, char a);
-    doodlebug(island *isla, int x, int y, char a);
-    void set_starved(bool a);
-    void gobble();
-    int starve();
-    void starve_doodle(int n);
-    bool starved_yet();
-    int hunting(ant **a, int j);
-    int huntCount();
+    Doodlebug(Playground *s, char b);
+    void setSpawned(bool status);
+    bool spawnedDoodle();
+    Doodlebug *spawn();
   private:
-   bool starved;
+   bool spawned;
    int days_starving;
-   int hunt;
 };
 #endif

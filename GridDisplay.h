@@ -1,12 +1,10 @@
-//Provided for this assignment.
-
 #include <cstdio>
 // for usleep
 #include <unistd.h>
 
 class GridDisplay
 {
- private:
+ protected:
    int rowCount;
    int colCount;
    char* dispVals;

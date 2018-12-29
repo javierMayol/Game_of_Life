@@ -12,7 +12,7 @@ class creature;
 class island
 {
   private:
-    creature* **location; //Dynamic 2d array of pointers;
+    creature ***location; //Dynamic 2d array of pointers;
     int rows;
     int cols;
     GridDisplay *gd;
@@ -29,7 +29,7 @@ class island
 
 class creature
 { 
-  protected:
+  public:
     island *isl;
     char bug; 
     int posX, posY, moveX, moveY;
@@ -43,10 +43,13 @@ class creature
     void setY(int y);
     int get_moveX();
     int get_moveY();
-    bool next_position();
+    virtual bool next_position();
     int days_alive() const;
     int get_x();
     int get_y();
     virtual void wander();
+    bool hasSpawned();
+    virtual creature* spawn(char a);
+
 };
 #endif

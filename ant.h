@@ -1,17 +1,16 @@
 #ifndef ANT_H
 #define ANT_H
 
-#include"creature.h"
-class ant: public creature
+#include"Critter.h"
+class Ant: public Critter
 {
   public:
-    ant(island *isla, char a);
-    ant(island *isla, int x, int y, char a);
-    bool set_eaten(bool s);
-    void dead_ant();
-    bool eaten_yet();
+    Ant(Playground *s, char b);
+    void setSpawned(bool status);
+    bool spawnedAnt();
+    Ant *spawn();
   private:
-    bool eaten;
+    bool spawned;
 };
 
 #endif

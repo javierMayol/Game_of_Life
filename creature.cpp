@@ -11,11 +11,10 @@ island::island(GridDisplay *grid, int r, int c){
   rows = r;
   cols = c;
   location = new creature**[rows];
-  for(int i = 0; i < rows; i++){
+  for(int i = 0; i < cols; i++){
      location[i] = new creature*[cols];
-     for(int j = 0; j < cols; j++){
-        location[i][j] = nullptr;
-     }
+     for(int j = 0; j < cols; j++)
+         location[i][j] = nullptr;
   }
 }
 void island::clear(int x, int y){
@@ -34,6 +33,7 @@ bool island::is_valid(int r, int c){
   else
     return false;
 }
+
 bool island::is_occupied(int r, int c){
   if(location[r][c]==nullptr)
     return false;
@@ -76,6 +76,7 @@ creature::creature(island *Island, char a){
   while(Island->add_beetle(this, posX, posY, bug)== false);
   days = 0;
 }
+
 creature::creature(island *Island, int x, int y, char a){
   isl = Island;
   bug = a;
@@ -139,7 +140,8 @@ bool creature:: next_position(){
   else
     spawned = false;
   return false;
-} 
+}
+ 
 void creature::wander() {
   int nextX = -999;
   int nextY = -999;
@@ -166,3 +168,13 @@ void creature::wander() {
     days++;
   }
 }
+
+creature* creature::spawn(char a){
+  if(next_position()==true)
+    return new creature(isl, moveX, moveY, a);
+  else 
+    return nullptr;
+}
+
+bool creature::hasSpawned(){return spawned;}  
+

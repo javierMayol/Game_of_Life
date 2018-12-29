@@ -1,5 +1,3 @@
-//Provided for this assignment.
-
 #include "GridDisplay.h"
 
 #include <ctime>
@@ -73,14 +71,6 @@ void GridDisplay::showGrid()
 
 void GridDisplay::mySleep ( int milliseconds )
 {
- // written for usleep() which takes microseconds
- //int param = milliseconds * 1000;
- //usleep ( param );
-    
- // written for C++ 2011 standard
- //std::this_thread::sleep_for ( std::chrono::seconds(1) );
-
-
  // written for use with time.h
  clock_t t;
  t = clock() + milliseconds * CLOCKS_PER_SEC / 1000;

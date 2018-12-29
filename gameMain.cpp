@@ -41,10 +41,11 @@ int main(int argc, char** argv)
   srand(time(NULL));
   int row = 25, col = 25;
   int day = 0, i, val, j, elapse = 200;
-  int bugCount = 20;
-  int beetleCount = 52;
-  int max = 25 * 25;
   int daysAlive = 0;
+  int bugCount = 20;
+  int beetleCount = 15;
+  int max = 25 * 25;
+
   if(argc > 1){
     row = atoi(argv[1]);
     while((!checkValidInput(row) || row < 3) || (!checkValidInput(row) || row > 150)){
@@ -83,21 +84,20 @@ int main(int argc, char** argv)
       exit(1);
     }
   }  
+
   GridDisplay gd(row, col);
   island island(&gd, row, col);
   ant **bug = new ant*[max];
   doodlebug **beetle = new doodlebug*[max];
-  for(int i = 0; i < bugCount; i++){
-    char ch = (char)((int)'A' + i);
+
+  for(int i = 0; i < bugCount; i++)
     bug[i] = new ant(&island, '!');
-  }
+  
   for(int i = 0; i < beetleCount; i++)
     beetle[i] = new doodlebug(&island, '@');  
+
   gd.showGrid();
   int count, e, starve = 0;
-  char killed[bugCount];
-  for(int i = 0; i < bugCount; i++)
-     killed[i] = '|';
 
   //Game starts
   while(day < elapse){
@@ -110,34 +110,49 @@ int main(int argc, char** argv)
       count = beetleCount;
     else if(bugCount == beetleCount)
       count = bugCount - 2;
-    //ant wander();
+
+    //Hunt
     i = 0;
     while(bug[i] != nullptr){
-      if(bug[i]->eaten_yet() == false)
+     j = 0; 
+     while(beetle[j] != nullptr){
+       if(!beetle[j]->starved_yet())
+         beetle[j]->hunting(bug[i]);
+       else
+         beetle[j]->starve();
+       beetle[j]->starve_doodle(50);
+       j++;
+      }
+      if(!bug[i]->eaten_yet())
         bug[i]->wander();
       i++;
     }
-    //beetle
-   j = 0; 
-   while(beetle[j] != nullptr){
-     if(beetle[j]->starved_yet() == false)
-        beetle[j]->wander();
-      //hunt!
-     if(!beetle[j]->starved_yet())
-       beetle[j]->hunting(bug,0);
-     beetle[j]->starve();
-     beetle[j]->starve_doodle(50);
-      j++;
+       
+    //Doodlebug wander
+    i = 0;
+    while(beetle[i] != nullptr)
+    {
+      doodlebug *spawny = nullptr;
+      if(!beetle[i]->starved_yet())
+        beetle[i]->wander();
+      i++;
     }
-
+/*
+    i = 0;
+    while(i < count)
+    {
+      if((!beetle[i]->starved_yet()) && (day%8 == 0))
+        beetle[beetleCount] = (doodlebug *)beetle[i]->spawn('@');
+      if(beetle[i]->hasSpawned()) beetleCount++;
+      i++;
+    }
     //reproduce
     if(beetleCount < max/2 && bugCount < max/2){
       for(int k = 0; k < rand()%count; k++){
         val = rand() % count;
         if(bug[val]->eaten_yet()==false){
           if(day % 3 == 0 && bug[val]->next_position() == true){
-            char ch = '!'; //(char)((int)'A' + bugCount);
-            bug[bugCount] = new ant(&island, bug[val]->get_moveX(), bug[val]->get_moveY(), ch);
+            bug[bugCount] = new ant(&island, bug[val]->get_moveX(), bug[val]->get_moveY(), '!');
             bugCount++;
           }
         }
@@ -152,8 +167,7 @@ int main(int argc, char** argv)
           val = rand() % 2;
 	  if(!bug[val]->eaten_yet()){
             if(day % 3 == 0 && bug[val]->next_position() == true){
-              char ch = (char)((int)'A' + bugCount);
-              bug[bugCount] = new ant(&island, bug[val]->get_moveX(), bug[val]->get_moveY(), ch);
+              bug[bugCount] = new ant(&island, bug[val]->get_moveX(), bug[val]->get_moveY(), '!');
 	      bugCount++;
             }
        	  }
@@ -167,37 +181,25 @@ int main(int argc, char** argv)
         }
       }
     }
- 
+*/
   //animation;
   gd.mySleep(200);
   gd.showGrid();
-  //reset counts
-  val = 0;
-  i = 0;
-  while(beetle[i] != nullptr){
-    if(beetle[i]->starved_yet() == false)
-      val++;
-    else
-      val = val;
-    i++;
-  }
-//  beetleCount = val;
 
-  val = 0;
-  i = 0;
-  while(bug[i] != nullptr){
-//    if(bug[i]->eaten_yet() == false)
-      val++;
-    i++;
-  }
   cout<<"days "<<day<<endl;
+  cout<<"doodlebugs "<<beetleCount<<endl;
 } 
   j = 0;
   int hunt = 0;
+
   while(beetle[j] != nullptr){  
-    hunt += beetle[j]->huntCount();
+    hunt = beetle[j]->huntCount();
+    cout<<"doodlebug["<<j<<"]"<<"hunts = "<<hunt<<endl;
     j++;
   }
-  cout<<"hunt "<<hunt<<endl;
+  for(i = 0; i < j ; i++)
+    free(beetle[i]);
+
+  free(beetle);
 }
 
