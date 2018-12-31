@@ -26,5 +26,5 @@ cs211 UIC
   The progam will ask the user to specify the number of ants, doodlebugs, and days
   to elapse in the simulation if the argument is entered.
 
-  Otherwise, the program will run with a default 25 X 25 grid with 20 ants, 15 doodlebugs, and
+  Otherwise, the program will run with a default 25 X 25 grid with 100 ants, 5 doodlebugs, and
   200 days span.
