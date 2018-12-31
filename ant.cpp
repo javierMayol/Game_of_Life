@@ -5,7 +5,7 @@
 #include"Ant.h"
 
 Ant::Ant(Playground *s, char b): Critter(s,b){spawned = false;}
- 
+
 bool Ant::spawnedAnt(){return spawned;}
 
 void Ant::setSpawned(bool status){spawned = status;}

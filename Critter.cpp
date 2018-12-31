@@ -12,7 +12,7 @@ Critter::Critter(Playground *s, char b)
   }
   while(!site->pos_available(Y, X));
   site->setChar(Y,X,body);
-  site->setPos(Y,X,true);
+  site->setPos(Y,X,false);
 }
 
 Critter::Critter(Playground *s, char b, int y, int x)
@@ -23,7 +23,12 @@ Critter::Critter(Playground *s, char b, int y, int x)
   Y = y;
   X = x;
   site->setChar(Y,X,body);
-  site->setPos(Y,X,true);
+  site->setPos(Y,X,false);
+}
+
+Critter::~Critter()
+{
+  delete[] site;
 }
 
 int Critter::getDays(){return days;}
@@ -33,16 +38,6 @@ void Critter::setBody(char b){body = b;}
 int Critter::getX(){return X;}
 
 int Critter::getY(){return Y;}
-
-//abs func returns absolute value of passed by value parameter.   
-int abs(int x){
-  return (x < 0)? -x: x;
-}
-
-//distance func calculates distance between two points in the grid.
-int distance(int x1, int y1, int x2, int y2){
-  return abs(x1 - x2) + abs(y1 - y2);      
-}
 
 void Critter::move(int y, int x)
 {
@@ -54,17 +49,15 @@ void Critter::move(int y, int x)
     return;
   x+=X;
   y+=Y;
-  if(x > site->getX()-1 || y > site->getY()-1)
-    return;
   if(y < 0 || x < 0)
     return;
   if(!site->pos_available(y,x))
-  return;
+    return;
   else {
     site->setChar(y,x,body);
     site->setChar(Y,X,'.');
-    site->setPos(y,x,true);
-    site->setPos(Y,X,false);
+    site->setPos(y,x,false);
+    site->setPos(Y,X,true);
   }
   X = x;
   Y = y;
@@ -79,17 +72,16 @@ Critter* Critter::addCritter(char b)
     return nullptr;
   x+=X;
   y+=Y;
-  if(x > site->getX()-1 || y > site->getY()-1)
-    return nullptr;
   if(y < 0 || x < 0)
     return nullptr;
   if(!site->pos_available(y,x))
     return nullptr;
   else
-    return new Critter(site,b ,y, x);
+    return new Critter(site,b,y,x);
 }
+
 void Critter::removeCritter()
 {
   site->setChar(Y,X,'.');
-  site->setPos(Y,X,false);
+  site->setPos(Y,X,true);
 }

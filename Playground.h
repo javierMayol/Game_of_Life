@@ -7,6 +7,7 @@ class Playground: public GridDisplay
 {
  public:
     Playground(int x, int y);
+    ~Playground();
     int getX();
     int getY();
     bool pos_available(int x, int y);
@@ -17,5 +18,5 @@ class Playground: public GridDisplay
     int posX;
     int posY;
     int pos_num;
-    bool ***pos_ptr;
+    bool **pos_ptr;
 };
