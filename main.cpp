@@ -111,6 +111,7 @@ int main(int argc, char** argv)
   Doodlebug **doodles = new Doodlebug*[CAP];
   for(int i = 0; i < doodleCount; i++)
     doodles[i] = new Doodlebug(&p, '@');
+
   Ant **ants = new Ant*[CAP];
   for(int i = 0; i < antCount; i++)
     ants[i] = new Ant(&p,'!'); //(char)((int)'1' + i));
@@ -141,7 +142,7 @@ int main(int argc, char** argv)
     while(doodles[j] != nullptr)
     {
       doodles[j]->move((rand()%3)-1,(rand()%3)-1);
-      if(doodles[j]->starved(13))
+      if(doodles[j]->starved(3))
       {
         doodles = removeBug(doodles, j, doodleCount);
 	doodleCount--;
@@ -151,7 +152,6 @@ int main(int argc, char** argv)
       {
         ants = removeAnt(ants, i, antCount);
         antCount--;
-        //cout<<i<<endl;
       }
       j++;
     }
