@@ -148,7 +148,7 @@ int main(int argc, char** argv)
 	doodleCount--;
 	continue;
       }
-      else if(doodles[j]->hunt(ants, &i))
+      if(doodles[j]->hunt(ants, &i))
       {
         ants = removeAnt(ants, i, antCount);
         antCount--;
@@ -180,7 +180,7 @@ int main(int argc, char** argv)
     {
       if((doodles[j]->getDays() > 1) && (doodles[j]->getDays()%8 == 0))
       {
-	//doodles[doodleCount] = doodles[j]->spawn();
+	doodles[doodleCount] = doodles[j]->spawn();
       	if(doodles[j]->spawnedDoodle())
         {
 	  doodleCount++;

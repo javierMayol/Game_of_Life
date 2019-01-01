@@ -12,8 +12,10 @@ cs211 UIC
 
   Required files in the same directory:
 
-     GridDisplay.cpp	README.txt	ant.h		creature.h	doodlebug.h	makefile
-     GridDisplay.h	ant.cpp		creature.cpp	doodlebug.cpp	gameMain.cpp
+	Ant.cpp		Doodlebug.cpp	Playground.cpp
+	Ant.h		Doodlebug.h	Playground.h	
+	Critter.cpp	GridDisplay.cpp	makefile
+	Critter.h	GridDisplay.h	main.cpp
 
   The comman line 'make' will compile and link all files.
 
