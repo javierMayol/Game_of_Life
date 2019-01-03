@@ -183,10 +183,7 @@ int main(int argc, char** argv)
   cout<<"Ants array "<<i<<endl;
   i = 0;
   while(bugs[i] != nullptr)
-  {
-     cout<<bugs[i]->getDays()<<endl;
-     i++;
-  }
+    i++;
   cout<<"Bugs array "<<i<<endl;
   i = 0;
   return 0;
