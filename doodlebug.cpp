@@ -8,26 +8,48 @@
 Doodlebug::Doodlebug(Playground *s, char b): Critter(s,b){spawned = false; 
 days_starving = 0;}
  
-bool Doodlebug::starved(int starve)
+bool Doodlebug::starvingBug(int starve)
 {
-  days_starving++;
-  if(days_starving >= starve)
-    return true;
-  return false;
+  return (days_starving > starve);
 }
 
 bool Doodlebug::spawnedDoodle(){return spawned;}
 
 void Doodlebug::setSpawned(bool status){spawned = status;}
 
+void Doodlebug::move(int y, int x)
+{
+  days++;
+  days_starving++;
+//  int y = (rand()%3) - 1;
+//  int x = (rand()%3) - 1;
+  if((x == 0)&&(y == 0))
+    return;
+  x+=X;
+  y+=Y;
+  if(y < 0 || x < 0)
+    return;
+  if(!site->pos_available(y,x))
+    return;
+  else {
+    site->setChar(y,x,body);
+    site->setChar(Y,X,'.');
+    site->setPos(y,x,false);
+    site->setPos(Y,X,true);
+  }
+  X = x;
+  Y = y;
+  //cout<<"else"<<endl;
+}
+
 Doodlebug *Doodlebug::spawn()
 {
-  Doodlebug *a = nullptr;
-  a = (Doodlebug *)this->addCritter('@');
-  if(a != nullptr)
+  Doodlebug *d = nullptr;
+  d = (Doodlebug *)this->addCritter('@');
+  if(d != nullptr)
   {
     spawned = true;
-    return a;
+    return d;
   }
   else
     spawned = false;

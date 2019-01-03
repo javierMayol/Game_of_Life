@@ -8,7 +8,8 @@ class Doodlebug: public Critter
 {
   public:
     Doodlebug(Playground *s, char b);
-    bool starved(int starve);
+    void move(int y , int x);
+    bool starvingBug(int starve);
     void setSpawned(bool status);
     bool spawnedDoodle();
     Doodlebug *spawn();

@@ -16,8 +16,8 @@
 #include<cstdlib>
 #include<ctime>
 #include"Ant.h"
-#include"Doodlebug.h"
 #include"Critter.h"
+#include"Doodlebug.h"
 
 using namespace std;
 
@@ -32,7 +32,7 @@ bool checkValidInput(int command)
     return false;
   }
   else if(command < 0 || command > 1000){
-    cout << "Invalid input. 0 < input > 100\n";
+    cout << "Invalid input. 0 < input > 1000\n";
     std::cin.clear();
     std::cin.ignore(256,'\n');
     return false;
@@ -53,8 +53,8 @@ Ant **removeAnt(Ant **ants, int dead_ant, int count)
 Doodlebug **removeBug(Doodlebug **bugs, int dead_bug, int count)
 {
   bugs[dead_bug]->removeCritter();
-  for(int j = dead_bug; j < count; j++){
-    bugs[j] = bugs[j + 1];
+  for(int i = dead_bug; i < count; i++){
+    bugs[i] = bugs[i + 1];
   }
   free(bugs[count]);
   return bugs;
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
   int row = 25, col = 25;
   int day = 0, i, j,elapse = 200;
   int antCount = 100;  
-  int doodleCount = 5;
+  int bugCount = 5;
 
   if(argc > 1){
     row = atoi(argv[1]);
@@ -84,12 +84,12 @@ int main(int argc, char** argv)
        cout<<"Give the number of ants."<<endl;
        std::cin>>antCount;
     }
-
+    
     cout<<"How many doodlebugs?"<<endl;
-    std::cin>>doodleCount;
-    while(checkValidInput(doodleCount)==false){ 
-       cout<<"Give the number of doodlebug."<<endl;
-       std::cin>>doodleCount;
+    std::cin>>bugCount;
+    while(!checkValidInput(bugCount)){
+      cout<<"Give the number of doodlebugs."<<endl;
+      std::cin>>bugCount;
     }
 
     cout<<"How many days will elapse?"<<endl;
@@ -98,70 +98,34 @@ int main(int argc, char** argv)
        cout<<"Enter the number of days again."<<endl;
        std::cin>>elapse;
     }
-
-    if(antCount >= CAP/2 || doodleCount >= CAP/2)
+    
+    if(antCount >= CAP/2 || bugCount >= CAP/2)
     {
-      cout<<"Oops!! too many bugs!\nYou need a bigger grid.\n";
-      exit(1);
+      cout<<"Oops!! Too many bugs!\nYou need a bigger grid."<<endl;
+      exit(-1);
     }
   }
-  
   Playground p(row, col);
   
-  Doodlebug **doodles = new Doodlebug*[CAP];
-  for(int i = 0; i < doodleCount; i++)
-    doodles[i] = new Doodlebug(&p, '@');
-
   Ant **ants = new Ant*[CAP];
   for(int i = 0; i < antCount; i++)
     ants[i] = new Ant(&p,'!'); //(char)((int)'1' + i));
+  Doodlebug **bugs = new Doodlebug *[CAP];
+  for(int j = 0; j < bugCount ; j++)
+    bugs[j] = new Doodlebug(&p, '@');
 
   p.showGrid();
 
   while(day < elapse)
   {
+    //Ants loop.
     i = 0;
     while(ants[i] != nullptr)
     {
       ants[i]->move((rand()%3)-1,(rand()%3)-1);
       if(ants[i]->getDays() > 2)
         ants[i]->setBody('!');
-    
-/*
-      if(ants[i]->getDays() > 4)
-      {
-        ants = removeAnt(ants, i, antCount);
-        antCount--;
-        continue;
-      }
-*/
-      i++;
-    }
-
-    j = 0; 
-    while(doodles[j] != nullptr)
-    {
-      doodles[j]->move((rand()%3)-1,(rand()%3)-1);
-      if(doodles[j]->starved(3))
-      {
-        doodles = removeBug(doodles, j, doodleCount);
-	doodleCount--;
-	continue;
-      }
-      if(doodles[j]->hunt(ants, &i))
-      {
-        ants = removeAnt(ants, i, antCount);
-        antCount--;
-      }
-      j++;
-    }
-
-
-    //Reproduce ant
-    i=0;
-    while(ants[i] != nullptr && antCount < CAP/2)
-    {
-      if((ants[i]->getDays() > 1) && (ants[i]->getDays()%3 == 0))
+      if(((ants[i]->getDays() > 1) && (ants[i]->getDays()%3 == 0)) && antCount < CAP/2)
       {
         ants[antCount] = ants[i]->spawn();
         if(ants[i]->spawnedAnt())
@@ -174,20 +138,32 @@ int main(int argc, char** argv)
       i++;
     }
 
-    //Reproduce doodlebug
+    //Doodlebugs loop
     j = 0;
-    while(doodles[j] != nullptr && doodleCount < CAP/2)
-    {
-      if((doodles[j]->getDays() > 1) && (doodles[j]->getDays()%8 == 0))
+    while(bugs[j] != nullptr)
+    { 
+      bugs[j]->move((rand()%3)-1, (rand()%3)-1);
+      if(bugs[j]->getDays()%8 == 0 && bugCount < CAP/2)
       {
-	doodles[doodleCount] = doodles[j]->spawn();
-      	if(doodles[j]->spawnedDoodle())
-        {
-	  doodleCount++;
+	bugs[bugCount] = bugs[j]->spawn();
+	if(bugs[j]->spawnedDoodle())
+    	{
+	  bugCount++;
 	  continue;
 	}
       }
-      doodles[j]->setSpawned(false);
+      bugs[j]->setSpawned(false);
+      if(bugs[j]->starvingBug(3))
+      {
+        bugs=removeBug(bugs,j,bugCount);
+        bugCount--;
+   	continue;
+      }
+      if(bugs[j]->hunt(ants, &i))
+      {
+        ants=removeAnt(ants, i, antCount);
+  	antCount--;
+      }
       j++;
     }
 
@@ -197,7 +173,7 @@ int main(int argc, char** argv)
     day++;
     cout<<"Day "<<day<<endl;
     cout<<"antCount "<<antCount<<endl;
-    cout<<"doodleCount "<<doodleCount<<endl;
+    cout<<"bugCount "<<bugCount<<endl;
     cout<<"positions taken "<<p.get_posNum()<<endl;
     //Animation ends
   }
@@ -206,8 +182,12 @@ int main(int argc, char** argv)
     i++;
   cout<<"Ants array "<<i<<endl;
   i = 0;
-  while(doodles[i] != nullptr)
-    i++;
-  cout<<"Doodle array "<<i<<endl;
+  while(bugs[i] != nullptr)
+  {
+     cout<<bugs[i]->getDays()<<endl;
+     i++;
+  }
+  cout<<"Bugs array "<<i<<endl;
+  i = 0;
   return 0;
 }
