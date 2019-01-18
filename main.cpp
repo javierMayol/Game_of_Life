@@ -120,7 +120,7 @@ int main(int argc, char** argv)
   {
     //Ants loop.
     i = 0;
-    while(ants[i] != nullptr)
+    while(ants[i])
     {
       ants[i]->move((rand()%3)-1,(rand()%3)-1);
       if(ants[i]->getDays() > 2)
@@ -140,7 +140,7 @@ int main(int argc, char** argv)
 
     //Doodlebugs loop
     j = 0;
-    while(bugs[j] != nullptr)
+    while(bugs[j])
     { 
       bugs[j]->move((rand()%3)-1, (rand()%3)-1);
       if(bugs[j]->getDays()%8 == 0 && bugCount < CAP/2)
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
         bugCount--;
    	continue;
       }
-      if(bugs[j]->hunt(ants, &i))
+      if(bugs[j]->hunt(ants, i))
       {
         ants=removeAnt(ants, i, antCount);
   	antCount--;
@@ -178,13 +178,22 @@ int main(int argc, char** argv)
     //Animation ends
   }
   i = 0;
-  while(ants[i] != nullptr)
+  while(ants[i])
     i++;
   cout<<"Ants array "<<i<<endl;
+
+  for(j = 0; j < i; j++)
+    free(ants[j]);
+  delete[] ants;
+
   i = 0;
-  while(bugs[i] != nullptr)
+  while(bugs[i])
     i++;
   cout<<"Bugs array "<<i<<endl;
-  i = 0;
+  
+  for(j = 0; j < i; j++)
+    free(bugs[j]);
+  delete[] bugs;
+
   return 0;
 }

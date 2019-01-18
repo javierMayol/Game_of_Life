@@ -13,7 +13,7 @@ class Doodlebug: public Critter
     void setSpawned(bool status);
     bool spawnedDoodle();
     Doodlebug *spawn();
-    bool hunt(Ant **ants, int *index);
+    bool hunt(Ant **ants, int& index);
   private:
    bool spawned;
    int days_starving;

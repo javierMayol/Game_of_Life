@@ -66,7 +66,7 @@ int distance(int x1, int y1, int x2, int y2){
   return abs(x1 - x2) + abs(y1 - y2);      
 }
 
-bool Doodlebug::hunt(Ant **ants, int *index)
+bool Doodlebug::hunt(Ant **ants, int& index)
 {
   int i = 0;
   while(ants[i] != nullptr)
@@ -75,7 +75,7 @@ bool Doodlebug::hunt(Ant **ants, int *index)
     {
        body = 'O';
        days_starving = 0;
-       *index = i;
+       index = i;
        return true;
     }
     i++;
