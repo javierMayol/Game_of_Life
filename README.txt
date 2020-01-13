@@ -21,8 +21,7 @@ cs211 UIC
 
   to load: ./game_of_life
 
-  The program can take an argument integer n to make a n rows by n columns grid if the user 
-  specifiees it. 
+  The program can take a command line argument integer n to make a n x n grid. 
   Example: ./game_of_life 20 
   The line above will create a grid 20 x 20.
   The progam will ask the user to specify the number of ants, doodlebugs, and days
